@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".viewmodel.ProductionSelectionViewModel"
+    android:orientation="vertical"
+    android:gravity="center">
+
+    <!-- RecyclerView pour afficher la liste des produits -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/products_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/submit_order_button"
+        android:layout_alignParentTop="true" />
+
+    <!-- Bouton pour soumettre la commande -->
+    <Button
+        android:id="@+id/submit_order_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:text="Submit Order" />
+
+</LinearLayout>

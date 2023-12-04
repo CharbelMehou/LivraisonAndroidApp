@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">Livraison</string>
+    <string name="email">Email</string>
+    <string name="login">Login</string>
+    <string name="password">Password</string>
+    <string name="register">Register</string>
+    <string name="logout">Log Out</string>
+    <string name="phoneNumber">Phone Number</string>
+    <string name="role_hint">Role</string>
+    <string name="select_role">Select Role</string>
+    <string name="truck_number_hint">Immatriculation</string>
+    <string name="welcome">Welcome</string>
+    <string name="pls">Please connect or register</string>
+    <string name="save">Save the changes</string>
+    <string name="editProfile">Edit your Profil Data</string>
+    <string name="adress">Adress</string>
+    <string name="setData">Set User Data</string>
+    <string name="setLivraison">Set Livraison</string>
+    <string name="manageDelivery">Manage Delivery</string>
+    <string name="nomProduct">Nom du produit :</string>
+    <string name="quantityProduct">Quantité(kg) :</string>
+</resources>

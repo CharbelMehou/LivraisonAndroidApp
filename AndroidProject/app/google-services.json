@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "505613245860",
+    "project_id": "livraison-app-android",
+    "storage_bucket": "livraison-app-android.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:505613245860:android:1b7c2704d7866d4de7b531",
+        "android_client_info": {
+          "package_name": "com.example.livraison"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyClxJ0PlmIsXhSot4I0Vc2yYB-sydJGlqo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
