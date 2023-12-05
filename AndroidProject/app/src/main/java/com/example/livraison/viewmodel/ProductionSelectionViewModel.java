@@ -1,13 +1,11 @@
 package com.example.livraison.viewmodel;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -17,12 +15,9 @@ import com.example.livraison.model.Order;
 import com.example.livraison.model.Product;
 import com.example.livraison.view.adapter.ProductAdapter;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.DocumentChange;
-import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
@@ -53,21 +48,20 @@ public class ProductionSelectionViewModel extends AppCompatActivity implements P
         productAdapter = new ProductAdapter(this, productArrayList, this);
         productsRecyclerView.setAdapter(productAdapter);
 
-        EventChangeListener();
+        loadProducts();
 
         Button submitOrderButton = findViewById(R.id.submit_order_button);
         submitOrderButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ArrayList<Product> selectedProducts = new ArrayList<>();
-                for (Product product : productArrayList) {
-                    if (product.getQuantity() != null && !product.getQuantity().isEmpty()) {
-                        selectedProducts.add(product);
-                    }
+                ArrayList<Product> selectedProducts = getSelectedProducts();
+                if (selectedProducts.isEmpty()) {
+                    Toast.makeText(ProductionSelectionViewModel.this, "No products selected", Toast.LENGTH_SHORT).show();
+                    return;
                 }
 
                 String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                String address = "User address here"; // N'oublie pas de remplacer par l'adresse réelle
+                String address = "User address here"; // Remplacer par l'adresse réelle
                 String deliveryDate = "Delivery date here"; // Remplacer par la date réelle
 
                 Order newOrder = new Order(userId, selectedProducts, address, deliveryDate);
@@ -83,35 +77,41 @@ public class ProductionSelectionViewModel extends AppCompatActivity implements P
         });
     }
 
-    private void EventChangeListener() {
+    private void loadProducts() {
         db.collection("produit")
                 .orderBy("nom", Query.Direction.ASCENDING)
-                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                    @Override
-                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                        if (error != null) {
-                            if (progressDialog.isShowing())
-                                progressDialog.dismiss();
-                            Log.e("Firestore error", error.getMessage());
-                            return;
-                        }
-
-                        for (DocumentChange dc : value.getDocumentChanges()) {
-                            if (dc.getType() == DocumentChange.Type.ADDED) {
-                                productArrayList.add(dc.getDocument().toObject(Product.class));
-                            }
-                            productAdapter.notifyDataSetChanged();
-                        }
-
+                .addSnapshotListener((value, error) -> {
+                    if (error != null) {
                         if (progressDialog.isShowing())
                             progressDialog.dismiss();
+                        Toast.makeText(this, "Error loading products: " + error.getMessage(), Toast.LENGTH_LONG).show();
+                        return;
                     }
+
+                    for (DocumentChange dc : value.getDocumentChanges()) {
+                        if (dc.getType() == DocumentChange.Type.ADDED) {
+                            productArrayList.add(dc.getDocument().toObject(Product.class));
+                        }
+                    }
+
+                    productAdapter.notifyDataSetChanged();
+                    if (progressDialog.isShowing())
+                        progressDialog.dismiss();
                 });
+    }
+
+    private ArrayList<Product> getSelectedProducts() {
+        ArrayList<Product> selectedProducts = new ArrayList<>();
+        for (Product product : productArrayList) {
+            if (product.getQuantity() != null && !product.getQuantity().isEmpty() && !product.getQuantity().equals("0")) {
+                selectedProducts.add(product);
+            }
+        }
+        return selectedProducts;
     }
 
     @Override
     public void onQuantityChanged(Product product, String newQuantity) {
-        // Mettre à jour la quantité du produit
         product.setQuantity(newQuantity);
     }
 }
