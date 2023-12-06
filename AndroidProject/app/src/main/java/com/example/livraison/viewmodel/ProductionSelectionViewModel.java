@@ -8,6 +8,7 @@ import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.livraison.R;
@@ -60,9 +61,17 @@ public class ProductionSelectionViewModel extends AppCompatActivity implements P
                     return;
                 }
 
+                EditText editTextAddress = findViewById(R.id.editTextAddress);
+                EditText editTextDate = findViewById(R.id.editTextDate);
+
                 String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                String address = "User address here"; // Remplacer par l'adresse réelle
-                String deliveryDate = "Delivery date here"; // Remplacer par la date réelle
+                String address = editTextAddress.getText().toString();
+                String deliveryDate = editTextDate.getText().toString();
+
+                if (address.isEmpty() || deliveryDate.isEmpty()) {
+                    Toast.makeText(ProductionSelectionViewModel.this, "Address and date are required", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
                 Order newOrder = new Order(userId, selectedProducts, address, deliveryDate);
 

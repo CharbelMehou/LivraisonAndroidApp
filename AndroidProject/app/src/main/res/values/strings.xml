@@ -26,5 +26,5 @@
     <string name="userEmail">User Email:</string>
     <string name="DeliveryAdress">Delivery Address:</string>
     <string name="deliveryDate">Delivery Date:</string>
-    <string name="submitDelivery">Submit Delivery</string>
+    <string name="submitDelivery">Validate Delivery</string>
 </resources>
