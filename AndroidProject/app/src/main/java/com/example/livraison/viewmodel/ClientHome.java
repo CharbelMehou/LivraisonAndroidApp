@@ -64,5 +64,15 @@ public class ClientHome extends AppCompatActivity {
                 finish();
             }
         });
+
+        //Pour rediriger vers la page de seleciton de produits
+        buttonSelectProduct.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent =new Intent(getApplicationContext(),ProductionSelectionViewModel.class);
+                startActivity(intent);
+                finish();
+            }
+        });
     }
 }
