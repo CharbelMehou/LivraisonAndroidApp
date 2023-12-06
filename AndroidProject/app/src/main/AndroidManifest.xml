@@ -15,6 +15,15 @@
         android:theme="@style/Theme.Material3.Dark"
         tools:targetApi="31">
         <activity
+            android:name=".viewmodel.ChauffeurHome"
+            android:exported="false" />
+        <activity
+            android:name=".viewmodel.PlanificateurHome"
+            android:exported="false" />
+        <activity
+            android:name=".viewmodel.ClientHome"
+            android:exported="false" />
+        <activity
             android:name=".viewmodel.ProductionSelectionViewModel"
             android:exported="false" />
         <activity

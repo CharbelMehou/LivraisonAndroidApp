@@ -15,10 +15,9 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity {
     FirebaseAuth auth;
-    Button button;
+    Button logOutbutton;
     Button buttonSetData;
     Button buttonSelectProduct;
-
     TextView textView;
     FirebaseUser user;
     @Override
@@ -27,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         auth=FirebaseAuth.getInstance();
-        button=findViewById(R.id.logout);
+        logOutbutton=findViewById(R.id.logout);
         buttonSetData=findViewById(R.id.setData);
         buttonSelectProduct=findViewById(R.id.gotoProductSelection);
         textView=findViewById(R.id.user_details);
@@ -40,10 +39,9 @@ public class MainActivity extends AppCompatActivity {
         }
         else{
             textView.setText(user.getEmail());
-
         }
         //rediriger vers la landing page
-        button.setOnClickListener(new View.OnClickListener() {
+        logOutbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //To sign Out the user from firebase
@@ -66,7 +64,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         //Pour rediriger vers la page de seleciton de produits
-
         buttonSelectProduct.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

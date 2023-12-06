@@ -153,6 +153,7 @@ public class RegisterViewModel extends AppCompatActivity {
                                         String userId = firebaseUser.getUid();
                                         // Prepare user data
                                         Map<String, Object> userData = new HashMap<>();
+                                        userData.put("email", email);
                                         userData.put("role", role);
                                         //to add immatriculation if the user is a chauffeur
                                         if (role.equals("chauffeur") && truckNumber != null) {
@@ -170,7 +171,7 @@ public class RegisterViewModel extends AppCompatActivity {
                                                     Toast.makeText(RegisterViewModel.this, "Account created with additional info.",
                                                             Toast.LENGTH_SHORT).show();
                                                     // Redirect to login or main activity
-                                                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                                    Intent intent = new Intent(getApplicationContext(), LoginViewModel.class);
                                                     startActivity(intent);
                                                     finish();
                                                 })

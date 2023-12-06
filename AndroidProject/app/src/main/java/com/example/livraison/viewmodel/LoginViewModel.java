@@ -4,7 +4,6 @@ import static android.widget.Toast.LENGTH_SHORT;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -21,10 +20,10 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class LoginViewModel extends AppCompatActivity {
-    TextInputEditText editTextEmail,editTextPassword;
+    TextInputEditText editTextEmail, editTextPassword;
     Button buttonLogin;
     FirebaseAuth mAuth;
     ProgressBar progressBar;
@@ -33,76 +32,86 @@ public class LoginViewModel extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        // Check if user is signed in
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        if(currentUser != null){
-            Intent intent=new Intent(getApplicationContext(), MainActivity.class);
-            startActivity(intent);
-            finish();
+        if(currentUser != null) {
+            redirectUserBasedOnRole();
         }
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_view_model);
-        editTextEmail=findViewById(R.id.email);
-        editTextPassword=findViewById(R.id.password);
-        buttonLogin=findViewById(R.id.btn_login);
-        mAuth=FirebaseAuth.getInstance();
-        progressBar=findViewById(R.id.progressBar);
 
-        textView=findViewById(R.id.RegsiterNow);
+        editTextEmail = findViewById(R.id.email);
+        editTextPassword = findViewById(R.id.password);
+        buttonLogin = findViewById(R.id.btn_login);
+        mAuth = FirebaseAuth.getInstance();
+        progressBar = findViewById(R.id.progressBar);
+        textView = findViewById(R.id.RegsiterNow);
 
-        //An indent to open the login activity
-        textView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent=new Intent(getApplicationContext(), RegisterViewModel.class);
-                startActivity(intent);
-                finish();
-            }
+        textView.setOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(), RegisterViewModel.class);
+            startActivity(intent);
+            finish();
         });
-        buttonLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                progressBar.setVisibility(View.VISIBLE);
-                String email,password;
-                email=String.valueOf(editTextEmail.getText());
-                password=String.valueOf(editTextPassword.getText());
 
-                //To check if the data to Login are empty or not
-                if(TextUtils.isEmpty(email)){
-                    Toast.makeText(LoginViewModel.this,"Enter email", LENGTH_SHORT).show();
-                    return;
-                }
+        buttonLogin.setOnClickListener(v -> {
+            String email = editTextEmail.getText().toString();
+            String password = editTextPassword.getText().toString();
 
-                if(TextUtils.isEmpty(password)){
-                    Toast.makeText(LoginViewModel.this,"Enter password", LENGTH_SHORT).show();
-                    return;
-                }
-
-                mAuth.signInWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                progressBar.setVisibility(View.GONE);
-                                if (task.isSuccessful()) {
-                                    // Sign in success,
-                                    Toast.makeText(LoginViewModel.this, "Authentication success.",
-                                            Toast.LENGTH_SHORT).show();
-                                    Intent intent=new Intent(getApplicationContext(), MainActivity.class);
-                                    startActivity(intent);
-                                    finish();
-                                } else {
-                                    // If sign in fails, display a message to the user.
-
-                                    Toast.makeText(LoginViewModel.this, "Authentication failed.",
-                                            Toast.LENGTH_SHORT).show();
-
-                                }
-                            }
-                        });
+            if(TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
+                Toast.makeText(LoginViewModel.this, "Please enter email and password", LENGTH_SHORT).show();
+                return;
             }
+
+            progressBar.setVisibility(View.VISIBLE);
+            mAuth.signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(task -> {
+                        progressBar.setVisibility(View.GONE);
+                        if (task.isSuccessful()) {
+                            redirectUserBasedOnRole();
+                        } else {
+                            Toast.makeText(LoginViewModel.this, "Authentication failed.", LENGTH_SHORT).show();
+                        }
+                    });
         });
+    }
+
+    private void redirectUserBasedOnRole() {
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null) {
+            String userId = currentUser.getUid();
+            FirebaseFirestore.getInstance().collection("users").document(userId).get()
+                    .addOnSuccessListener(documentSnapshot -> {
+                        if (documentSnapshot.exists()) {
+                            String role = documentSnapshot.getString("role");
+                            navigateToHome(role);
+                        } else {
+                            Toast.makeText(this, "User role not found", LENGTH_SHORT).show();
+                        }
+                    })
+                    .addOnFailureListener(e -> Toast.makeText(this, "Error: " + e.getMessage(), LENGTH_SHORT).show());
+        }
+    }
+
+    private void navigateToHome(String role) {
+        Intent intent;
+        switch (role) {
+            case "client":
+                intent = new Intent(getApplicationContext(), ClientHome.class);
+                break;
+            case "planificateur":
+                intent = new Intent(getApplicationContext(), PlanificateurHome.class);
+                break;
+            case "chauffeur":
+                intent = new Intent(getApplicationContext(), ChauffeurHome.class);
+                break;
+            default:
+                intent = new Intent(getApplicationContext(), MainActivity.class);
+                break;
+        }
+        startActivity(intent);
+        finish();
     }
 }
