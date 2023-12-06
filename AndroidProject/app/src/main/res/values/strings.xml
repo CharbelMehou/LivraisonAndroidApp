@@ -19,4 +19,12 @@
     <string name="manageDelivery">Manage Delivery</string>
     <string name="nomProduct">Nom du produit :</string>
     <string name="quantityProduct">Quantité(kg) :</string>
+    <string name="setUpAddress">Please Enter the delivery address</string>
+    <string name="deliverAddress">Delivery Address</string>
+    <string name="deliverDate">Delivery Date</string>
+    <string name="setUpDeliveryData">Set Up Delivery Data</string>
+    <string name="userEmail">User Email:</string>
+    <string name="DeliveryAdress">Delivery Address:</string>
+    <string name="deliveryDate">Delivery Date:</string>
+    <string name="submitDelivery">Submit Delivery</string>
 </resources>

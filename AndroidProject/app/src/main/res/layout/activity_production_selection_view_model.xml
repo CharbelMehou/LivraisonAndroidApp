@@ -3,25 +3,59 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".viewmodel.ProductionSelectionViewModel"
-    android:orientation="vertical"
-    android:gravity="center">
+    tools:context=".viewmodel.ProductionSelectionViewModel">
 
     <!-- RecyclerView pour afficher la liste des produits -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/products_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/submit_order_button"
+        android:layout_height="0dp"
+        android:layout_above="@+id/deliveryData"
         android:layout_alignParentTop="true" />
 
-    <!-- Bouton pour soumettre la commande -->
-    <Button
-        android:id="@+id/submit_order_button"
+    <LinearLayout
+        android:id="@+id/deliveryData"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="8dp"
-        android:text="Submit Order" />
+        android:padding="16dp"
+        android:orientation="vertical"
+        android:background="@drawable/rounded_corners">
+
+        <TextView
+            android:id="@+id/textViewSetUpDeliveryData"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/setUpDeliveryData"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
+
+        <EditText
+            android:id="@+id/editTextAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/deliverAddress"
+            android:inputType="text"
+            android:textSize="20sp"
+            android:textColor="@color/white"
+            android:layout_marginTop="8dp" />
+
+        <EditText
+            android:id="@+id/editTextDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/deliverDate"
+            android:inputType="date"
+            android:textSize="20sp"
+            android:textColor="@color/white"
+            android:layout_marginTop="8dp" />
+
+        <Button
+            android:id="@+id/submit_order_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Submit Order"
+            android:layout_marginTop="8dp" />
+    </LinearLayout>
 
 </RelativeLayout>

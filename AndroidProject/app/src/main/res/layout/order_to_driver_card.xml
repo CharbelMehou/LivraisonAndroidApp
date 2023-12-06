@@ -1,0 +1,59 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="16dp"
+    android:background="@drawable/bordered_background">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        app:cardElevation="8dp"
+        app:cardCornerRadius="8dp"
+        android:layout_margin="2dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textViewUserEmail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/userEmail"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:layout_marginRight="20dp"/>
+            <TextView
+                android:id="@+id/textViewAddress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/DeliveryAdress"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:layout_marginRight="20dp"/>
+            <TextView
+                android:id="@+id/textViewDeliveryDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/deliveryDate"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:layout_marginRight="20dp"/>
+            <Spinner
+                android:id="@+id/spinnerDrivers"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:layout_marginTop="10dp"/>
+            <Button
+                android:id="@+id/submit_delivery_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/submitDelivery"
+                android:layout_marginTop="8dp" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</FrameLayout>
