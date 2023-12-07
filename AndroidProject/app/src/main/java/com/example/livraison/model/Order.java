@@ -3,7 +3,7 @@ package com.example.livraison.model;
 import java.util.ArrayList;
 
 public class Order {
-    private String userId;
+    private String userEmail;
     private ArrayList<Product> orderedProducts;
     private String address;
     private String deliveryDate;
@@ -11,19 +11,19 @@ public class Order {
     public Order() {
     }
 
-    public Order(String userId, ArrayList<Product> orderedProducts, String address, String deliveryDate) {
-        this.userId = userId;
+    public Order(String userEmail, ArrayList<Product> orderedProducts, String address, String deliveryDate) {
+        this.userEmail = userEmail;
         this.orderedProducts = orderedProducts;
         this.address = address;
         this.deliveryDate = deliveryDate;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getUserEmail() {
+        return userEmail;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
     }
 
     public ArrayList<Product> getOrderedProducts() {

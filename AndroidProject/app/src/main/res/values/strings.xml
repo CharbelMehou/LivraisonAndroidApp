@@ -27,4 +27,7 @@
     <string name="DeliveryAdress">Delivery Address:</string>
     <string name="deliveryDate">Delivery Date:</string>
     <string name="submitDelivery">Validate Delivery</string>
+    <string name="back">Back</string>
+    <string name="validateOrder">Validate Order</string>
+    <string name="addTobasket">Add To Basket</string>
 </resources>

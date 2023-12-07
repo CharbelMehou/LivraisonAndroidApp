@@ -29,11 +29,13 @@ public class PlanificateurAdapter extends RecyclerView.Adapter<PlanificateurAdap
     private Context context;
     private ArrayList<User> userArrayList;
     private ArrayList<Order> orderArrayList;
+    private ArrayList<String> driverEmails;
 
-    public PlanificateurAdapter(Context context, ArrayList<User> userArrayList, ArrayList<Order> orderArrayList) {
+    public PlanificateurAdapter(Context context, ArrayList<User> userArrayList, ArrayList<Order> orderArrayList,ArrayList<String> driverEmails) {
         this.context = context;
         this.userArrayList = userArrayList;
         this.orderArrayList = orderArrayList;
+        this.driverEmails = driverEmails;
     }
 
     @NonNull
@@ -48,16 +50,42 @@ public class PlanificateurAdapter extends RecyclerView.Adapter<PlanificateurAdap
         Order order = orderArrayList.get(position);
         holder.deliveryAddress.setText(order.getAddress());
         holder.deliveryDate.setText(order.getDeliveryDate());
+        holder.userEmail.setText(order.getUserEmail());
+
+        // Configurer le Spinner avec les emails des chauffeurs
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, driverEmails);
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        holder.spinnerDrivers.setAdapter(spinnerAdapter);
+
+        // Ajouter un écouteur pour gérer la sélection des éléments du Spinner
+        holder.spinnerDrivers.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // Logique à exécuter lorsqu'un élément est sélectionné
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Logique à exécuter lorsqu'aucun élément n'est sélectionné
+            }
+        });
+    }
+    // Méthode pour mettre à jour les emails des chauffeurs
+    public void setDriverEmails(ArrayList<String> driverEmails) {
+        this.driverEmails = driverEmails;
+        notifyDataSetChanged(); // Informer l'adapter que les données ont changé
     }
     @Override
     public int getItemCount() {return orderArrayList.size();}
     public static class MyViewHolder extends RecyclerView.ViewHolder {
+        TextView userEmail;
         TextView deliveryDate;
         TextView deliveryAddress;
         Spinner spinnerDrivers;
         Button submitButton;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
+            userEmail=itemView.findViewById(R.id.textViewUserEmail);
             deliveryDate = itemView.findViewById(R.id.textViewDeliveryDate);
             deliveryAddress = itemView.findViewById(R.id.textViewAddress);
             spinnerDrivers = itemView.findViewById(R.id.spinnerDrivers);

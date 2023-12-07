@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -52,6 +53,7 @@ public class ProductionSelectionViewModel extends AppCompatActivity implements P
         loadProducts();
 
         Button submitOrderButton = findViewById(R.id.submit_order_button);
+        Button goBackButton=findViewById(R.id.goback_button);
         submitOrderButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -64,7 +66,7 @@ public class ProductionSelectionViewModel extends AppCompatActivity implements P
                 EditText editTextAddress = findViewById(R.id.editTextAddress);
                 EditText editTextDate = findViewById(R.id.editTextDate);
 
-                String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                String userEmail=FirebaseAuth.getInstance().getCurrentUser().getEmail();
                 String address = editTextAddress.getText().toString();
                 String deliveryDate = editTextDate.getText().toString();
 
@@ -73,7 +75,7 @@ public class ProductionSelectionViewModel extends AppCompatActivity implements P
                     return;
                 }
 
-                Order newOrder = new Order(userId, selectedProducts, address, deliveryDate);
+                Order newOrder = new Order(userEmail, selectedProducts, address, deliveryDate);
 
                 db.collection("orders").add(newOrder)
                         .addOnSuccessListener(documentReference -> {
@@ -82,6 +84,16 @@ public class ProductionSelectionViewModel extends AppCompatActivity implements P
                         .addOnFailureListener(e -> {
                             Toast.makeText(ProductionSelectionViewModel.this, "Failed to place order.", Toast.LENGTH_LONG).show();
                         });
+            }
+        });
+
+
+        goBackButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent =new Intent(getApplicationContext(),ClientHome.class);
+                startActivity(intent);
+                finish();
             }
         });
     }
