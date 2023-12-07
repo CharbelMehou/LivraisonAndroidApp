@@ -4,14 +4,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".viewmodel.ProductionSelectionViewModel">
-
+    <Button
+        android:id="@+id/goback_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/back"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="8dp"/>
     <!-- RecyclerView pour afficher la liste des produits -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/products_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_above="@+id/deliveryData"
-        android:layout_alignParentTop="true" />
+        android:layout_height="match_parent"
+        android:layout_below="@id/goback_button"
+        android:layout_above="@+id/deliveryData"/>
 
     <LinearLayout
         android:id="@+id/deliveryData"
