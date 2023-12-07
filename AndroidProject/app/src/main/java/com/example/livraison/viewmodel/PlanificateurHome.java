@@ -104,7 +104,6 @@ public class PlanificateurHome extends AppCompatActivity {
 
     private void loadOrders() {
         db.collection("orders")
-                .whereEqualTo("isValidateByPlaneur", false) // Filtrer les commandes non validées
                 .addSnapshotListener((value, error) -> {
                     if (error != null) {
                         if (progressDialog.isShowing())
@@ -113,34 +112,39 @@ public class PlanificateurHome extends AppCompatActivity {
                         return;
                     }
 
-                    ArrayList<Order> newOrders = new ArrayList<>();
                     for (DocumentChange dc : value.getDocumentChanges()) {
+                        Order order = dc.getDocument().toObject(Order.class);
+                        order.setTempId(dc.getDocument().getId());
                         switch (dc.getType()) {
                             case ADDED:
-                                // Ajouter seulement si la commande n'est pas validée
-                                Order order = dc.getDocument().toObject(Order.class);
-                                order.setTempId(dc.getDocument().getId());
-                                if (!order.getIsValidateByPlaneur()) {
-                                    newOrders.add(order);
+                                if (!order.getIsValidateByPlaneur() && !orderArrayList.contains(order)) {
+                                    orderArrayList.add(order);
                                 }
                                 break;
                             case MODIFIED:
-                                // Gérer les modifications si nécessaire
+                                for (int i = 0; i < orderArrayList.size(); i++) {
+                                    if (orderArrayList.get(i).getTempId().equals(order.getTempId())) {
+                                        if (order.getIsValidateByPlaneur()) {
+                                            orderArrayList.remove(i);
+                                        } else {
+                                            orderArrayList.set(i, order);
+                                        }
+                                        break;
+                                    }
+                                }
                                 break;
                             case REMOVED:
-                                // Gérer la suppression si nécessaire
+                                orderArrayList.removeIf(o -> o.getTempId().equals(order.getTempId()));
                                 break;
                         }
                     }
 
-                    orderArrayList.clear();
-                    orderArrayList.addAll(newOrders);
                     planificateurAdapter.notifyDataSetChanged();
-
                     if (progressDialog.isShowing())
                         progressDialog.dismiss();
                 });
     }
+
 
 
     private void loadDriverEmails() {
