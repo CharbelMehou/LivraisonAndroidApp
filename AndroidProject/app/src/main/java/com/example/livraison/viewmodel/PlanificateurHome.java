@@ -1,5 +1,7 @@
 package com.example.livraison.viewmodel;
 
+import static android.widget.Toast.LENGTH_SHORT;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,6 +23,7 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import java.util.ArrayList;
 import android.app.ProgressDialog;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -34,7 +37,6 @@ public class PlanificateurHome extends AppCompatActivity {
     FirebaseUser user;
     RecyclerView recyclerView;
     PlanificateurAdapter planificateurAdapter;
-    ArrayList<User> userArrayList = new ArrayList<>();
     ArrayList<String> driversEmails=new ArrayList<>();
     ArrayList<Order> orderArrayList = new ArrayList<>();
     FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -83,8 +85,6 @@ public class PlanificateurHome extends AppCompatActivity {
             }
         });
 
-
-
         progressDialog = new ProgressDialog(this);
         progressDialog.setCancelable(false);
         progressDialog.setMessage("Fetching Data....");
@@ -94,7 +94,7 @@ public class PlanificateurHome extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        planificateurAdapter = new PlanificateurAdapter(this, userArrayList, orderArrayList,driversEmails);
+        planificateurAdapter = new PlanificateurAdapter(this, orderArrayList,driversEmails);
         recyclerView.setAdapter(planificateurAdapter);
 
         loadOrders();
@@ -104,25 +104,44 @@ public class PlanificateurHome extends AppCompatActivity {
 
     private void loadOrders() {
         db.collection("orders")
+                .whereEqualTo("isValidateByPlaneur", false) // Filtrer les commandes non validées
                 .addSnapshotListener((value, error) -> {
                     if (error != null) {
                         if (progressDialog.isShowing())
                             progressDialog.dismiss();
-                        Toast.makeText(this, "Error loading products: " + error.getMessage(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(this, "Error loading orders: " + error.getMessage(), Toast.LENGTH_LONG).show();
                         return;
                     }
 
+                    ArrayList<Order> newOrders = new ArrayList<>();
                     for (DocumentChange dc : value.getDocumentChanges()) {
-                        if (dc.getType() == DocumentChange.Type.ADDED) {
-                            orderArrayList.add(dc.getDocument().toObject(Order.class));
+                        switch (dc.getType()) {
+                            case ADDED:
+                                // Ajouter seulement si la commande n'est pas validée
+                                Order order = dc.getDocument().toObject(Order.class);
+                                order.setTempId(dc.getDocument().getId());
+                                if (!order.getIsValidateByPlaneur()) {
+                                    newOrders.add(order);
+                                }
+                                break;
+                            case MODIFIED:
+                                // Gérer les modifications si nécessaire
+                                break;
+                            case REMOVED:
+                                // Gérer la suppression si nécessaire
+                                break;
                         }
                     }
 
+                    orderArrayList.clear();
+                    orderArrayList.addAll(newOrders);
                     planificateurAdapter.notifyDataSetChanged();
+
                     if (progressDialog.isShowing())
                         progressDialog.dismiss();
                 });
     }
+
 
     private void loadDriverEmails() {
         db.collection("users")

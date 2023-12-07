@@ -69,13 +69,17 @@ public class ProductionSelectionViewModel extends AppCompatActivity implements P
                 String userEmail=FirebaseAuth.getInstance().getCurrentUser().getEmail();
                 String address = editTextAddress.getText().toString();
                 String deliveryDate = editTextDate.getText().toString();
-
+                //the state of the order is initialize to waiting then after the planificateur proccess and the chauffeur confirmation it'll be turn to "lauch "
+                String state="waiting";
+                //The driver selected is none at this state and it'll change when the planificateur will affect a chauffeur to a mission
+                String driverSelected="none";
+                boolean isValidateByPlaneur=false;
                 if (address.isEmpty() || deliveryDate.isEmpty()) {
                     Toast.makeText(ProductionSelectionViewModel.this, "Address and date are required", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                Order newOrder = new Order(userEmail, selectedProducts, address, deliveryDate);
+                Order newOrder = new Order(userEmail, selectedProducts, address, deliveryDate,isValidateByPlaneur,state,driverSelected);
 
                 db.collection("orders").add(newOrder)
                         .addOnSuccessListener(documentReference -> {
