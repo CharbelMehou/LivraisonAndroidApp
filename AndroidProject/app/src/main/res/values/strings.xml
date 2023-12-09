@@ -30,5 +30,7 @@
     <string name="back">Back</string>
     <string name="validateOrder">Validate Order</string>
     <string name="addTobasket">Add To Basket</string>
-    <string name="selectAnOption">HI please select an option</string>
+    <string name="selectAnOption">HI! please select an option</string>
+    <string name="seeOnGoingDelivery">On Going Delivery</string>
+    <string name="seeWaitingDelivery">Wainting delivery</string>
 </resources>
