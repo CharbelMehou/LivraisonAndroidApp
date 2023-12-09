@@ -22,9 +22,10 @@ import java.util.Map;
 public class EditProfile extends AppCompatActivity {
     private TextInputEditText editTextEmail, editTextPassword, editTextPhone, editTextTruckNumber, editTextAddress;
     private TextInputLayout truckNumberLayout, addressLayout;
-    private Button buttonSave;
+    private Button buttonSave,buttonBa;
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
+    private  String userRole;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +44,7 @@ public class EditProfile extends AppCompatActivity {
         truckNumberLayout = findViewById(R.id.truckNumberLayout);
         addressLayout = findViewById(R.id.addressLayout);
         buttonSave = findViewById(R.id.buttonSave);
+        Button goBackButton=findViewById(R.id.goback_button);
 
         // Récupération et gestion du rôle de l'utilisateur
         FirebaseUser currentUser = mAuth.getCurrentUser();
@@ -52,6 +54,7 @@ public class EditProfile extends AppCompatActivity {
                     .addOnSuccessListener(documentSnapshot -> {
                         if (documentSnapshot.exists()) {
                             String role = documentSnapshot.getString("role");
+                            userRole=role;
                             // Afficher/Cacher les champs en fonction du rôle
                             if ("chauffeur".equals(role)) {
                                 truckNumberLayout.setVisibility(View.VISIBLE);
@@ -118,6 +121,30 @@ public class EditProfile extends AppCompatActivity {
                         });
             } else {
                 Toast.makeText(EditProfile.this, "No user signed in!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+        goBackButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent;
+                switch (userRole) {
+                    case "client":
+                        intent = new Intent(getApplicationContext(), ClientHome.class);
+                        break;
+                    case "planificateur":
+                        intent = new Intent(getApplicationContext(), PlanificateurHome.class);
+                        break;
+                    case "chauffeur":
+                        intent = new Intent(getApplicationContext(), ChauffeurHome.class);
+                        break;
+                    default:
+                        intent = new Intent(getApplicationContext(), MainActivity.class);
+                        break;
+                }
+                startActivity(intent);
+                finish();
             }
         });
 
