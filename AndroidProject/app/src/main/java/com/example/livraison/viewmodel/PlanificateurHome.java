@@ -104,6 +104,7 @@ public class PlanificateurHome extends AppCompatActivity {
 
     private void loadOrders() {
         db.collection("orders")
+                .whereEqualTo("isValidateByPlaneur", false)
                 .addSnapshotListener((value, error) -> {
                     if (error != null) {
                         if (progressDialog.isShowing())

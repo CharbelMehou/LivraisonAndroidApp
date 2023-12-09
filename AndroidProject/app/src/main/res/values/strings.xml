@@ -33,4 +33,6 @@
     <string name="selectAnOption">HI! please select an option</string>
     <string name="seeOnGoingDelivery">On Going Delivery</string>
     <string name="seeWaitingDelivery">Wainting delivery</string>
+    <string name="validateDelivery">Accept Delivery</string>
+    <string name="refuseDelivery">Refuse Delivery</string>
 </resources>
