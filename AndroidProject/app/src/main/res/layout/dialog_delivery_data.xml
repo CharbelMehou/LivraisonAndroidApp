@@ -1,0 +1,48 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:background="@drawable/rounded_corners"
+    android:layout_margin="10dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+    android:text="@string/setUpDeliveryData"
+    android:textStyle="bold"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        />
+
+    <EditText
+        android:id="@+id/editTextAddressDialog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/deliverAddress"
+        android:inputType="text"
+        android:textSize="20sp"
+        android:textColor="@color/white"
+        android:layout_marginTop="8dp" />
+
+    <EditText
+        android:id="@+id/editTextDateDialog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/deliverDate"
+        android:inputType="date"
+        android:textSize="20sp"
+        android:textColor="@color/white"
+        android:layout_marginTop="8dp" />
+
+    <Button
+        android:id="@+id/buttonConfirm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/confirm"
+        android:layout_marginTop="8dp"
+        android:textSize="20sp"
+        android:textColor="@color/white"
+        />
+</LinearLayout>

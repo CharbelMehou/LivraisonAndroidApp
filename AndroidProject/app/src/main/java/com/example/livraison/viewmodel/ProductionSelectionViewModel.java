@@ -16,6 +16,7 @@ import com.example.livraison.R;
 import com.example.livraison.model.Order;
 import com.example.livraison.model.Product;
 import com.example.livraison.view.adapter.ProductAdapter;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -41,64 +42,25 @@ public class ProductionSelectionViewModel extends AppCompatActivity implements P
         progressDialog.setMessage("Fetching Data....");
         progressDialog.show();
 
-        productsRecyclerView = findViewById(R.id.products_recycler_view);
-        productsRecyclerView.setHasFixedSize(true);
-        productsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-
         db = FirebaseFirestore.getInstance();
         productArrayList = new ArrayList<>();
         productAdapter = new ProductAdapter(this, productArrayList, this);
+
+        productsRecyclerView = findViewById(R.id.products_recycler_view);
+        productsRecyclerView.setHasFixedSize(true);
+        productsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         productsRecyclerView.setAdapter(productAdapter);
 
         loadProducts();
 
         Button submitOrderButton = findViewById(R.id.submit_order_button);
-        Button goBackButton=findViewById(R.id.goback_button);
-        submitOrderButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ArrayList<Product> selectedProducts = getSelectedProducts();
-                if (selectedProducts.isEmpty()) {
-                    Toast.makeText(ProductionSelectionViewModel.this, "No products selected", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+        submitOrderButton.setOnClickListener(v -> showBottomSheetDialog());
 
-                EditText editTextAddress = findViewById(R.id.editTextAddress);
-                EditText editTextDate = findViewById(R.id.editTextDate);
-
-                String userEmail=FirebaseAuth.getInstance().getCurrentUser().getEmail();
-                String address = editTextAddress.getText().toString();
-                String deliveryDate = editTextDate.getText().toString();
-                //the state of the order is initialize to waiting then after the planificateur proccess and the chauffeur confirmation it'll be turn to "lauch "
-                String state="waiting";
-                //The driver selected is none at this state and it'll change when the planificateur will affect a chauffeur to a mission
-                String driverSelected="none";
-                boolean isValidateByPlaneur=false;
-                if (address.isEmpty() || deliveryDate.isEmpty()) {
-                    Toast.makeText(ProductionSelectionViewModel.this, "Address and date are required", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                Order newOrder = new Order(userEmail, selectedProducts, address, deliveryDate,isValidateByPlaneur,state,driverSelected);
-
-                db.collection("orders").add(newOrder)
-                        .addOnSuccessListener(documentReference -> {
-                            Toast.makeText(ProductionSelectionViewModel.this, "Order placed successfully!", Toast.LENGTH_LONG).show();
-                        })
-                        .addOnFailureListener(e -> {
-                            Toast.makeText(ProductionSelectionViewModel.this, "Failed to place order.", Toast.LENGTH_LONG).show();
-                        });
-            }
-        });
-
-
-        goBackButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent =new Intent(getApplicationContext(),ClientHome.class);
-                startActivity(intent);
-                finish();
-            }
+        Button goBackButton = findViewById(R.id.goback_button);
+        goBackButton.setOnClickListener(v -> {
+            Intent intent = new Intent(ProductionSelectionViewModel.this, ClientHome.class);
+            startActivity(intent);
+            finish();
         });
     }
 
@@ -107,8 +69,7 @@ public class ProductionSelectionViewModel extends AppCompatActivity implements P
                 .orderBy("nom", Query.Direction.ASCENDING)
                 .addSnapshotListener((value, error) -> {
                     if (error != null) {
-                        if (progressDialog.isShowing())
-                            progressDialog.dismiss();
+                        progressDialog.dismiss();
                         Toast.makeText(this, "Error loading products: " + error.getMessage(), Toast.LENGTH_LONG).show();
                         return;
                     }
@@ -120,9 +81,46 @@ public class ProductionSelectionViewModel extends AppCompatActivity implements P
                     }
 
                     productAdapter.notifyDataSetChanged();
-                    if (progressDialog.isShowing())
-                        progressDialog.dismiss();
+                    progressDialog.dismiss();
                 });
+    }
+
+    private void showBottomSheetDialog() {
+        final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);
+        bottomSheetDialog.setContentView(R.layout.dialog_delivery_data);
+
+        Button buttonConfirm = bottomSheetDialog.findViewById(R.id.buttonConfirm);
+        buttonConfirm.setOnClickListener(v -> {
+            EditText editTextAddressDialog = bottomSheetDialog.findViewById(R.id.editTextAddressDialog);
+            EditText editTextDateDialog = bottomSheetDialog.findViewById(R.id.editTextDateDialog);
+
+            String address = editTextAddressDialog.getText().toString();
+            String deliveryDate = editTextDateDialog.getText().toString();
+
+            if (address.isEmpty() || deliveryDate.isEmpty()) {
+                Toast.makeText(this, "Address and date are required", Toast.LENGTH_SHORT).show();
+            } else {
+                placeOrder(address, deliveryDate);
+                bottomSheetDialog.dismiss();
+            }
+        });
+
+        bottomSheetDialog.show();
+    }
+
+    private void placeOrder(String address, String deliveryDate) {
+        ArrayList<Product> selectedProducts = getSelectedProducts();
+        if (selectedProducts.isEmpty()) {
+            Toast.makeText(this, "No products selected", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String userEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+        Order newOrder = new Order(userEmail, selectedProducts, address, deliveryDate, false, "waiting", "none");
+
+        db.collection("orders").add(newOrder)
+                .addOnSuccessListener(documentReference -> Toast.makeText(this, "Order placed successfully!", Toast.LENGTH_LONG).show())
+                .addOnFailureListener(e -> Toast.makeText(this, "Failed to place order.", Toast.LENGTH_LONG).show());
     }
 
     private ArrayList<Product> getSelectedProducts() {

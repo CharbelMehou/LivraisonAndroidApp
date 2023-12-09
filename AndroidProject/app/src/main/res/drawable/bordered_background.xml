@@ -1,5 +1,5 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <solid android:color="#FFFFFF"/> <!-- Background color of the CardView -->
-    <stroke android:width="5dp" android:color="#B892FF"/> <!-- Border color and width -->
-    <corners android:radius="8dp"/> <!-- Match the corner radius of your CardView -->
+    <solid android:color="#FFFFFF"/>
+    <stroke android:width="5dp" android:color="#B892FF"/>
+    <corners android:radius="8dp"/>
 </shape>

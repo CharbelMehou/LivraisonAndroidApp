@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".viewmodel.ProductionSelectionViewModel">
+
     <Button
         android:id="@+id/goback_button"
         android:layout_width="wrap_content"
@@ -11,57 +12,21 @@
         android:text="@string/back"
         android:layout_alignParentTop="true"
         android:layout_marginTop="8dp"/>
-    <!-- RecyclerView pour afficher la liste des produits -->
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/products_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@id/goback_button"
-        android:layout_above="@+id/deliveryData"/>
+        android:layout_above="@+id/submit_order_button"/>
 
-    <LinearLayout
-        android:id="@+id/deliveryData"
+    <Button
+        android:id="@+id/submit_order_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:padding="16dp"
-        android:orientation="vertical"
-        android:background="@drawable/rounded_corners">
-
-        <TextView
-            android:id="@+id/textViewSetUpDeliveryData"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/setUpDeliveryData"
-            android:textColor="@color/white"
-            android:textSize="20sp" />
-
-        <EditText
-            android:id="@+id/editTextAddress"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/deliverAddress"
-            android:inputType="text"
-            android:textSize="15sp"
-            android:textColor="@color/white"
-            android:layout_marginTop="8dp" />
-
-        <EditText
-            android:id="@+id/editTextDate"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/deliverDate"
-            android:inputType="date"
-            android:textSize="15sp"
-            android:textColor="@color/white"
-            android:layout_marginTop="8dp" />
-
-        <Button
-            android:id="@+id/submit_order_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Submit Order"
-            android:layout_marginTop="8dp" />
-    </LinearLayout>
+        android:text="Submit Order"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_alignParentBottom="true"/>
 
 </RelativeLayout>
