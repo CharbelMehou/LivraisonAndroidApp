@@ -39,7 +39,7 @@
         android:layout_marginTop="64dp"
         android:layout_marginBottom="20dp"
 
-        android:src="@drawable/clientImg" />
+        android:src="@drawable/client_img" />
 
     <TextView
         android:id="@+id/textView"
