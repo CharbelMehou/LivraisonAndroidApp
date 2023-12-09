@@ -30,6 +30,27 @@
             android:layout_height="wrap_content"
             android:text="@string/setData" />
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/image_client_person"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/header"
+        android:layout_marginTop="64dp"
+        android:layout_marginBottom="20dp"
+
+        android:src="@drawable/clientImg" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:layout_below="@id/image_client_person"
+        android:text="@string/selectAnOption" />
     <!--  bouton pour la sélection des produits -->
     <Button
         android:id="@+id/gotoProductSelection"
@@ -37,7 +58,7 @@
         android:layout_height="wrap_content"
         android:text="Select Products"
         android:layout_centerHorizontal="true"
-        android:layout_above="@id/gotoLivraison"
+        android:layout_below="@id/textView"
         android:layout_marginBottom="20dp" />
 
     <!-- Bouton  pour la gestion des livraisons -->
@@ -46,5 +67,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/manageDelivery"
+        android:layout_below="@id/gotoProductSelection"
         android:layout_centerInParent="true" />
 </RelativeLayout>

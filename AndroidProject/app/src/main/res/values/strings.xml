@@ -30,4 +30,5 @@
     <string name="back">Back</string>
     <string name="validateOrder">Validate Order</string>
     <string name="addTobasket">Add To Basket</string>
+    <string name="selectAnOption">HI please select an option</string>
 </resources>
