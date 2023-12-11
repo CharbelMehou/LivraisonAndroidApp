@@ -31,10 +31,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/deliverDate"
-        android:inputType="date"
+        android:inputType="none"
+        android:focusable="false"
         android:textSize="20sp"
         android:textColor="@color/white"
-        android:layout_marginTop="8dp" />
+        android:layout_marginTop="8dp"
+        />
+
 
     <Button
         android:id="@+id/buttonConfirm"
@@ -44,5 +47,6 @@
         android:layout_marginTop="8dp"
         android:textSize="20sp"
         android:textColor="@color/white"
+        android:backgroundTint="#A479C9"
         />
 </LinearLayout>

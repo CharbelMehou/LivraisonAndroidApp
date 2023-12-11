@@ -76,10 +76,10 @@ public class DriverAdapter extends RecyclerView.Adapter<DriverAdapter.MyViewHold
                 .update(updates)
                 .addOnSuccessListener(aVoid -> {
                     String message;
-                    if(isAccepted==true)
-                        message="Commande validée avec succès";
-                    else
-                        message="Commande refusée avec succès";
+                    if(isAccepted==true){
+                        message="Commande validée avec succès";}
+                    else{
+                        message="Commande refusée avec succès";}
                         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
                 })
                 .addOnFailureListener(e -> {

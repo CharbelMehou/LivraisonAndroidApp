@@ -17,6 +17,7 @@ public class ChauffeurHome extends AppCompatActivity {
     Button logOutbutton;
     Button buttonSetData;
     Button gotoWaitingDelivery;
+    Button gotoOngoingDelivery;
     TextView textView;
     FirebaseUser user;
     @Override
@@ -30,6 +31,7 @@ public class ChauffeurHome extends AppCompatActivity {
         textView=findViewById(R.id.user_details);
         user =auth.getCurrentUser();
         gotoWaitingDelivery=findViewById(R.id.gotoWaitingDelivery);
+        gotoOngoingDelivery=findViewById(R.id.gotoOnGoingDelivery);
         //to check if the user is log or not
         if(user==null){
             Intent intent =new Intent(getApplicationContext(),LoginViewModel.class);
@@ -67,6 +69,14 @@ public class ChauffeurHome extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent =new Intent(getApplicationContext(),WaintingDelivery.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+        gotoOngoingDelivery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent =new Intent(getApplicationContext(),OnGoingDelivery.class);
                 startActivity(intent);
                 finish();
             }

@@ -37,4 +37,5 @@
     <string name="refuseDelivery">Refuse </string>
     <string name="submitOrder">Submit Order</string>
     <string name="confirm">Confirm</string>
+    <string name="viewDeliveryItineraire">View Itineraire</string>
 </resources>

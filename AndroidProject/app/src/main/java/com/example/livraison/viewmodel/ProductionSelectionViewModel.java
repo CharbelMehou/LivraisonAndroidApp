@@ -4,11 +4,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -23,6 +25,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class ProductionSelectionViewModel extends AppCompatActivity implements ProductAdapter.OnQuantityChangedListener {
 
@@ -89,10 +92,27 @@ public class ProductionSelectionViewModel extends AppCompatActivity implements P
         final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);
         bottomSheetDialog.setContentView(R.layout.dialog_delivery_data);
 
+        EditText editTextDateDialog = bottomSheetDialog.findViewById(R.id.editTextDateDialog);
+        editTextDateDialog.setOnClickListener(view -> {
+            // Obtention de la date courante
+            final Calendar calendar = Calendar.getInstance();
+            int year = calendar.get(Calendar.YEAR);
+            int month = calendar.get(Calendar.MONTH);
+            int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+            // Création du DatePickerDialog
+            DatePickerDialog datePickerDialog = new DatePickerDialog(this,
+                    (datePicker, selectedYear, selectedMonth, selectedDay) -> { // Notez le changement ici, 'view' remplacé par 'datePicker'
+                        String selectedDate = selectedDay + "/" + (selectedMonth + 1) + "/" + selectedYear;
+                        editTextDateDialog.setText(selectedDate);
+                    }, year, month, day);
+            datePickerDialog.show();
+        });
+
+
         Button buttonConfirm = bottomSheetDialog.findViewById(R.id.buttonConfirm);
         buttonConfirm.setOnClickListener(v -> {
             EditText editTextAddressDialog = bottomSheetDialog.findViewById(R.id.editTextAddressDialog);
-            EditText editTextDateDialog = bottomSheetDialog.findViewById(R.id.editTextDateDialog);
 
             String address = editTextAddressDialog.getText().toString();
             String deliveryDate = editTextDateDialog.getText().toString();
