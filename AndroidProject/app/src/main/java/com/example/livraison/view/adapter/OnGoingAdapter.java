@@ -1,6 +1,7 @@
 package com.example.livraison.view.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.livraison.R;
 import com.example.livraison.model.Order;
+import com.example.livraison.viewmodel.OnGoingDelivery;
+import com.example.livraison.viewmodel.ViewItineraire;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
@@ -46,7 +49,9 @@ public class OnGoingAdapter extends RecyclerView.Adapter<OnGoingAdapter.MyViewHo
         holder.viewDeliveryItineraire.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(context, ViewItineraire.class);
+                intent.putExtra("ORDER_ID", order.getTempId());
+                context.startActivity(intent);
             }
         });
     }

@@ -29,6 +29,8 @@ public class OnGoingDelivery extends AppCompatActivity {
     private ArrayList<Order> orderArrayList = new ArrayList<>();
     private ProgressDialog progressDialog;
     private Button goBackButton;
+    private Button viewDeliveryItineraire;
+
     private String driverEmail; // Variable to store driver's email
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 

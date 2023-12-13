@@ -7,13 +7,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
-
+import okhttp3.OkHttpClient;
+import android.util.Pair;
 import com.example.livraison.R;
 import com.example.livraison.model.Order;
 import com.example.livraison.model.Product;
@@ -23,10 +25,18 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
-
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
-
+import java.util.function.Consumer;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 public class ProductionSelectionViewModel extends AppCompatActivity implements ProductAdapter.OnQuantityChangedListener {
 
     private FirebaseFirestore db;
@@ -34,6 +44,7 @@ public class ProductionSelectionViewModel extends AppCompatActivity implements P
     private ArrayList<Product> productArrayList;
     private ProgressDialog progressDialog;
     private ProductAdapter productAdapter;
+    private OkHttpClient client = new OkHttpClient();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,22 +124,28 @@ public class ProductionSelectionViewModel extends AppCompatActivity implements P
         Button buttonConfirm = bottomSheetDialog.findViewById(R.id.buttonConfirm);
         buttonConfirm.setOnClickListener(v -> {
             EditText editTextAddressDialog = bottomSheetDialog.findViewById(R.id.editTextAddressDialog);
-
             String address = editTextAddressDialog.getText().toString();
             String deliveryDate = editTextDateDialog.getText().toString();
 
             if (address.isEmpty() || deliveryDate.isEmpty()) {
                 Toast.makeText(this, "Address and date are required", Toast.LENGTH_SHORT).show();
             } else {
-                placeOrder(address, deliveryDate);
-                bottomSheetDialog.dismiss();
+                verifyAddress(address, coords -> {
+                    if (coords != null) {
+                        placeOrder(address, deliveryDate, coords.first, coords.second);
+                        bottomSheetDialog.dismiss();
+                    } else {
+                        Toast.makeText(this, "Address is invalid", Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
+
 
         bottomSheetDialog.show();
     }
 
-    private void placeOrder(String address, String deliveryDate) {
+    private void placeOrder(String address, String deliveryDate, String latitude, String longitude) {
         ArrayList<Product> selectedProducts = getSelectedProducts();
         if (selectedProducts.isEmpty()) {
             Toast.makeText(this, "No products selected", Toast.LENGTH_SHORT).show();
@@ -136,12 +153,24 @@ public class ProductionSelectionViewModel extends AppCompatActivity implements P
         }
 
         String userEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
-        Order newOrder = new Order(userEmail, selectedProducts, address, deliveryDate, false, "waiting", "none");
+        Order newOrder = new Order(userEmail,
+                        selectedProducts,
+                        address,
+                        deliveryDate,
+                        false,
+                        "waiting",
+                        "none",
+                        latitude,
+                        longitude);
 
-        db.collection("orders").add(newOrder)
-                .addOnSuccessListener(documentReference -> Toast.makeText(this, "Order placed successfully!", Toast.LENGTH_LONG).show())
-                .addOnFailureListener(e -> Toast.makeText(this, "Failed to place order.", Toast.LENGTH_LONG).show());
+        db.collection("orders")
+                .add(newOrder)
+                .addOnSuccessListener(
+                        documentReference -> Toast.makeText(this, "Order placed successfully!", Toast.LENGTH_LONG).show())
+                .addOnFailureListener(
+                        e -> Toast.makeText(this, "Failed to place order.", Toast.LENGTH_LONG).show());
     }
+
 
     private ArrayList<Product> getSelectedProducts() {
         ArrayList<Product> selectedProducts = new ArrayList<>();
@@ -157,4 +186,56 @@ public class ProductionSelectionViewModel extends AppCompatActivity implements P
     public void onQuantityChanged(Product product, String newQuantity) {
         product.setQuantity(newQuantity);
     }
+
+    private void verifyAddress(String address,  Consumer<Pair<String, String>> callback) {
+        String apiUrl = "https://api-adresse.data.gouv.fr/search/?q=" + Uri.encode(address);
+
+        Request request = new Request.Builder()
+                .url(apiUrl)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                runOnUiThread(() -> {
+                    Toast.makeText(ProductionSelectionViewModel.this, "Network error", Toast.LENGTH_SHORT).show();
+                    callback.accept(null);
+                });
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    String responseData = response.body().string();
+                    try {
+                        JSONObject jsonObject = new JSONObject(responseData);
+                        JSONArray features = jsonObject.getJSONArray("features");
+                        if (features.length() > 0) {
+                            JSONObject geometry = features.getJSONObject(0).getJSONObject("geometry");
+                            JSONArray coordinates = geometry.getJSONArray("coordinates");
+                            String longitude = String.valueOf(coordinates.getDouble(0));
+                            String latitude = String.valueOf(coordinates.getDouble(1));
+                            runOnUiThread(() -> {
+                                callback.accept(new Pair<>(latitude, longitude));
+                            });
+                        } else {
+                            runOnUiThread(() -> {
+                                callback.accept(null);
+                            });
+                        }
+                    } catch (JSONException e) {
+                        runOnUiThread(() -> {
+                            Toast.makeText(ProductionSelectionViewModel.this, "Error parsing response", Toast.LENGTH_SHORT).show();
+                            callback.accept(null);
+                        });
+                    }
+                } else {
+                    runOnUiThread(() -> {
+                        Toast.makeText(ProductionSelectionViewModel.this, "Error from server", Toast.LENGTH_SHORT).show();
+                        callback.accept(null);
+                    });
+                }
+            }
+        });
+}
 }

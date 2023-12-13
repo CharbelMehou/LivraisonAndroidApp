@@ -52,6 +52,16 @@
         android:layout_marginBottom="10dp"
         android:layout_below="@id/image_driver_person"
         android:text="@string/selectAnOption" />
+    <LinearLayout
+        android:id="@+id/buttonLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_below="@id/textView"
+        >
+
+
     <!--  bouton pour la sélection des produits -->
     <Button
         android:id="@+id/gotoWaitingDelivery"
@@ -59,17 +69,24 @@
         android:layout_height="wrap_content"
         android:text="@string/seeWaitingDelivery"
         android:layout_centerHorizontal="true"
-        android:layout_below="@id/textView"
-        android:layout_marginBottom="10dp" />
+        android:layout_marginRight="10dp" />
 
     <!-- Bouton  pour la gestion des livraisons -->
+
     <Button
         android:id="@+id/gotoOnGoingDelivery"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/seeOnGoingDelivery"
-        android:layout_below="@id/gotoWaitingDelivery"
         android:layout_centerInParent="true" />
-
+    </LinearLayout>
+    <!-- Bouton  pour l'historique des livraisons -->
+    <Button
+        android:id="@+id/gotoHistoryDelivery"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/seeHistoryDelivery"
+        android:layout_below="@id/buttonLayout"
+        android:layout_centerInParent="true" />
 
 </RelativeLayout>
