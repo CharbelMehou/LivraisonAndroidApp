@@ -38,4 +38,6 @@
     <string name="submitOrder">Submit Order</string>
     <string name="confirm">Confirm</string>
     <string name="viewDeliveryItineraire">View Itineraire</string>
+    <string name="seeHistoryDelivery">History Delivery</string>
+    <string name="clearDelivery">Livraison Terminée</string>
 </resources>
