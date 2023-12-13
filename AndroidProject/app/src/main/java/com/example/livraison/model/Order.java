@@ -12,10 +12,13 @@ public class Order {
     private String state;
     private String driverSelected;
 
+    private String longitude;
+    private String latitude;
+
     public Order() {
     }
 
-    public Order(String  tempId,String userEmail, ArrayList<Product> orderedProducts, String address, String deliveryDate, boolean isValidateByPlaneur,String state,String driverSelected) {
+    public Order(String  tempId,String userEmail, ArrayList<Product> orderedProducts, String address, String deliveryDate, boolean isValidateByPlaneur,String state,String driverSelected,String latitude,String longitude) {
         this.tempId= tempId;
         this.userEmail = userEmail;
         this.orderedProducts = orderedProducts;
@@ -24,17 +27,20 @@ public class Order {
         this.state=state;
         this.isValidateByPlaneur=isValidateByPlaneur;
         this.driverSelected=driverSelected;
+        this.longitude=longitude;
+        this.latitude=latitude;
     }
 
-    public Order(String userEmail, ArrayList<Product> orderedProducts, String address, String deliveryDate, boolean isValidateByPlaneur, String state, String driverSelected) {
+    public Order(String userEmail, ArrayList<Product> orderedProducts, String address, String deliveryDate, boolean isValidateByPlaneur, String state, String driverSelected,String latitude,String longitude) {
         this.userEmail = userEmail;
         this.orderedProducts = orderedProducts;
         this.address = address;
         this.deliveryDate = deliveryDate;
         this.state = state;
         this.isValidateByPlaneur=isValidateByPlaneur;
-
         this.driverSelected = driverSelected;
+        this.longitude=longitude;
+        this.latitude=latitude;
     }
 
     public boolean getIsValidateByPlaneur() {
@@ -98,5 +104,21 @@ public class Order {
 
     public void setState(String state) {
         this.state = state;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
     }
 }
