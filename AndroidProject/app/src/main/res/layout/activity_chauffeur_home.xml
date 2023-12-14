@@ -82,7 +82,7 @@
     </LinearLayout>
     <!-- Bouton  pour l'historique des livraisons -->
     <Button
-        android:id="@+id/gotoHistoryDelivery"
+        android:id="@+id/gotoDeliveryHistory"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/seeHistoryDelivery"

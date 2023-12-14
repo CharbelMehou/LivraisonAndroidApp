@@ -1,5 +1,5 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <solid android:color="#FFFFFF"/>
+    <solid android:color="@android:color/transparent"/> <!-- Use transparent color for background -->
     <stroke android:width="5dp" android:color="#B892FF"/>
     <corners android:radius="8dp"/>
 </shape>

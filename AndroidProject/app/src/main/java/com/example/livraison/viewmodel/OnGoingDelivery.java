@@ -22,55 +22,50 @@ import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class OnGoingDelivery extends AppCompatActivity {
     private RecyclerView deliveryOngoingRecyclerView;
     private OnGoingAdapter onGoingAdapter;
-    private ArrayList<Order> orderArrayList = new ArrayList<>();
     private ProgressDialog progressDialog;
     private Button goBackButton;
-    private Button viewDeliveryItineraire;
 
-    private String driverEmail; // Variable to store driver's email
+    private String driverEmail; // Variable pour stocker l'email du conducteur
     FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+    // Structure pour regrouper les commandes par date
+    private HashMap<String, ArrayList<Order>> ordersGroupedByDate = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_on_going_delivery);
 
-
-
-        // Initialize the ProgressDialog
+        // Initialiser la ProgressDialog
         progressDialog = new ProgressDialog(this);
         progressDialog.setCancelable(false);
         progressDialog.setMessage("Fetching Data...");
         progressDialog.show();
 
-        // Get the current driver's email from Firebase Authentication
+        // Obtenir l'email du conducteur actuel depuis Firebase Authentication
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
-            driverEmail = user.getEmail(); // Store the email in the variable
+            driverEmail = user.getEmail();
         }
 
-        // Set up the RecyclerView
+        // Configurer le RecyclerView
         deliveryOngoingRecyclerView = findViewById(R.id.delivery_ongoing_recycler_view);
         deliveryOngoingRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        onGoingAdapter = new OnGoingAdapter(this, orderArrayList, driverEmail);
-        deliveryOngoingRecyclerView.setAdapter(onGoingAdapter);
 
-        // Set up the Go Back button
+        // Configurer le bouton Go Back
         goBackButton = findViewById(R.id.goback_button);
-        goBackButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent =new Intent(getApplicationContext(),ChauffeurHome.class);
-                startActivity(intent);
-                finish();
-            }
+        goBackButton.setOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(), ChauffeurHome.class);
+            startActivity(intent);
+            finish();
         });
-        fetchOrders();
 
+        fetchOrders();
     }
 
     private void fetchOrders() {
@@ -86,38 +81,24 @@ public class OnGoingDelivery extends AppCompatActivity {
                         return;
                     }
 
+                    // Réinitialiser la structure pour regrouper les commandes par date
+                    ordersGroupedByDate.clear();
+
                     if (value != null) {
                         for (DocumentChange dc : value.getDocumentChanges()) {
                             Order order = dc.getDocument().toObject(Order.class);
                             order.setTempId(dc.getDocument().getId());
 
-                            switch (dc.getType()) {
-                                case ADDED:
-                                    // Assuming you want to add to the list only if the order is waiting and validated
-                                    if ("accepted".equals(order.getState())) {
-                                        orderArrayList.add(order);
-                                    }
-                                    break;
-                                case MODIFIED:
-                                    // Here, find the existing Order and update or remove it
-                                    for (int i = 0; i < orderArrayList.size(); i++) {
-                                        if (orderArrayList.get(i).getTempId().equals(order.getTempId())) {
-                                            if ("accepted".equals(order.getState())) {
-                                                orderArrayList.set(i, order);
-                                            } else {
-                                                orderArrayList.remove(i);
-                                            }
-                                            break;
-                                        }
-                                    }
-                                    break;
-                                case REMOVED:
-                                    orderArrayList.removeIf(o -> o.getTempId().equals(order.getTempId()));
-                                    break;
-                            }
+                            // Ajoutez les commandes dans le HashMap groupé par date
+                            String deliveryDate = order.getDeliveryDate(); // Assurez-vous que cette méthode renvoie la date sous forme de String
+                            ArrayList<Order> ordersForDate = ordersGroupedByDate.getOrDefault(deliveryDate, new ArrayList<>());
+                            ordersForDate.add(order);
+                            ordersGroupedByDate.put(deliveryDate, ordersForDate);
                         }
 
-                        onGoingAdapter.notifyDataSetChanged();
+                        // Mettez à jour l'adaptateur avec les données groupées et informez le RecyclerView de la mise à jour
+                        onGoingAdapter = new OnGoingAdapter(this, ordersGroupedByDate, driverEmail);
+                        deliveryOngoingRecyclerView.setAdapter(onGoingAdapter);
                     }
 
                     if (progressDialog.isShowing())
