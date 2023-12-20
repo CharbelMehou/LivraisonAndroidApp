@@ -35,14 +35,49 @@
             android:layout_height="wrap_content"
             android:text="@string/setData" />
     </LinearLayout>
-
-    <!-- RecyclerView pour la liste des commandes, -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/order_recycler_view"
+    <ImageView
+        android:id="@+id/image_planner_person"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@id/header"
-        android:padding="10dp"
-        />
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+
+        android:src="@drawable/planificateur_img" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_below="@id/image_planner_person"
+        android:text="@string/selectAnOption" />
+
+
+
+        <!--  bouton pour la sélection des produits -->
+        <Button
+            android:id="@+id/setupDriver"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/setupDriver"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/textView"
+
+            android:layout_marginRight="10dp" />
+
+        <!-- Bouton  pour la gestion des livraisons -->
+
+        <Button
+            android:id="@+id/setupItineraire"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/setupItineraire"
+            android:layout_centerInParent="true"
+            android:layout_below="@id/setupDriver"
+            />
 
 </RelativeLayout>
