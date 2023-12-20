@@ -17,6 +17,8 @@ import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.Polyline;
+import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
+import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,8 +26,11 @@ import java.util.List;
 public class ViewItineraire extends AppCompatActivity {
     private MapView map;
     private FirebaseFirestore db;
-     Button deliveryClearButton;
+    Button deliveryClearButton;
+    private GeoPoint warehouse= new GeoPoint(49.4336728, 1.0839967);;
     private List<GeoPoint> deliveryPoints = new ArrayList<>();
+    private MyLocationNewOverlay myLocationOverlay;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +38,7 @@ public class ViewItineraire extends AppCompatActivity {
         setContentView(R.layout.activity_view_itineraire);
 
         Button goBackButton = findViewById(R.id.goback_button);
-        Button deliveryClearButton=findViewById(R.id.delivery_clear_button);
+        Button deliveryClearButton = findViewById(R.id.delivery_clear_button);
         deliveryClearButton.setOnClickListener(v -> {
             ArrayList<String> orderIds = getIntent().getStringArrayListExtra("ORDER_ID_LIST");
             if (orderIds != null && !orderIds.isEmpty()) {
@@ -53,14 +58,16 @@ public class ViewItineraire extends AppCompatActivity {
         map.setBuiltInZoomControls(true);
         map.setMultiTouchControls(true);
 
+        deliveryPoints.add(warehouse);
+        addMarker(warehouse, "Entrepot",R.drawable.warehouse);
+
         ArrayList<String> orderIds = getIntent().getStringArrayListExtra("ORDER_ID_LIST");
         if (orderIds != null && !orderIds.isEmpty()) {
             fetchDeliveryPoints(orderIds);
         } else {
             Toast.makeText(this, "Liste des ID de commande non fournie", Toast.LENGTH_LONG).show();
         }
-
-
+        drawPolyline();
     }
 
     private void fetchDeliveryPoints(ArrayList<String> orderIds) {
@@ -77,8 +84,8 @@ public class ViewItineraire extends AppCompatActivity {
                                 double longitude = Double.parseDouble(longitudeStr);
                                 GeoPoint deliveryPoint = new GeoPoint(latitude, longitude);
                                 deliveryPoints.add(deliveryPoint);
-                                addMarker(deliveryPoint, "Commande ID: " + orderId);
-
+                                addMarker(deliveryPoint, "Commande ID: " + orderId,R.drawable.delivery_point);
+                                drawPolyline();
                                 // Dessiner les polylignes après avoir ajouté tous les points
                                 if (deliveryPoints.size() == orderIds.size()) {
                                     drawPolyline();
@@ -102,13 +109,24 @@ public class ViewItineraire extends AppCompatActivity {
     }
 
 
-    private void addMarker(GeoPoint point, String title) {
+
+
+    private void addMarker(GeoPoint point, String title, int drawableResId) {
         Marker marker = new Marker(map);
         marker.setPosition(point);
         marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
         marker.setTitle(title);
+        marker.setIcon(getResources().getDrawable(drawableResId, getApplicationContext().getTheme()));
         map.getOverlays().add(marker);
+
+        marker.setOnMarkerClickListener((marker1, mapView) -> {
+            map.getController().animateTo(marker1.getPosition());
+            map.getController().setZoom(18);
+            return true;
+        });
     }
+
+
 
     private void drawPolyline() {
         Polyline line = new Polyline();
@@ -154,6 +172,4 @@ public class ViewItineraire extends AppCompatActivity {
                     .addOnFailureListener(e -> Toast.makeText(ViewItineraire.this, "Erreur lors de la mise à jour de la commande (ID: " + orderId + ")", Toast.LENGTH_SHORT).show());
         }
     }
-
-
 }
