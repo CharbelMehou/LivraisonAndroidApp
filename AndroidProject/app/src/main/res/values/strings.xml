@@ -40,4 +40,9 @@
     <string name="viewDeliveryItineraire">View Itineraire</string>
     <string name="seeHistoryDelivery">History Delivery</string>
     <string name="clearDelivery">Livraison Terminée</string>
+    <string name="DeliveryStep">Etape de livraison:</string>
+    <string name="driverEmail">Driver Email:</string>
+    <string name="PersonToDeliverEmail">User à livrer:</string>
+    <string name="setupDriver">Affecter Chauffeur</string>
+    <string name="setupItineraire">Affecter Itinéraie</string>
 </resources>
