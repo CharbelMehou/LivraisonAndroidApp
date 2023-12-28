@@ -153,7 +153,8 @@ public class ProductionSelectionViewModel extends AppCompatActivity implements P
         }
 
         String userEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
-        Order newOrder = new Order(userEmail,
+        Order newOrder = new Order(
+                        userEmail,
                         selectedProducts,
                         address,
                         deliveryDate,
@@ -161,16 +162,17 @@ public class ProductionSelectionViewModel extends AppCompatActivity implements P
                         "waiting",
                         "none",
                         latitude,
-                        longitude);
+                        longitude,
+                        null
+                        );
 
-        db.collection("orders")
+            db.collection("orders")
                 .add(newOrder)
                 .addOnSuccessListener(
                         documentReference -> Toast.makeText(this, "Order placed successfully!", Toast.LENGTH_LONG).show())
                 .addOnFailureListener(
                         e -> Toast.makeText(this, "Failed to place order.", Toast.LENGTH_LONG).show());
     }
-
 
     private ArrayList<Product> getSelectedProducts() {
         ArrayList<Product> selectedProducts = new ArrayList<>();
