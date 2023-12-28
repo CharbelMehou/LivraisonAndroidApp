@@ -56,7 +56,7 @@
         android:id="@+id/gotoProductSelection"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Select Products"
+        android:text="@string/selectProducts"
         android:layout_centerHorizontal="true"
         android:layout_below="@id/textView"
         android:layout_marginBottom="10dp" />
