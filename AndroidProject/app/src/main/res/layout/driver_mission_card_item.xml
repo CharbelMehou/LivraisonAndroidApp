@@ -1,83 +1,75 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="16dp"
-    android:background="@drawable/bordered_background">
-    <androidx.cardview.widget.CardView
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="16dp">
+
+    <View
+        android:id="@+id/circleView"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/circle_shape"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        />
+
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        app:cardElevation="8dp"
-        app:cardCornerRadius="8dp"
+        android:layout_toRightOf="@id/circleView"
+        android:background="@drawable/bordered_background"
         android:layout_margin="2dp">
 
-        <LinearLayout
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:orientation="vertical">
-            <androidx.appcompat.widget.LinearLayoutCompat
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                >
-                <TextView
-                    android:id="@+id/textView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/driverEmail"
-                    android:textColor="@color/white"
-                    android:textSize="20sp"
-                    android:layout_marginRight="10dp"/>
-                <TextView
-                    android:id="@+id/textViewDriverEmail"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/white"
-                    android:textSize="20sp"
-                    android:layout_marginRight="10dp"/>
-            </androidx.appcompat.widget.LinearLayoutCompat>
-            <androidx.appcompat.widget.LinearLayoutCompat
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="10dp"
-                >
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/PersonToDeliverEmail"
-                    android:textColor="@color/white"
-                    android:textSize="20sp"
-                    android:layout_marginRight="10dp"/>
-                <TextView
-                    android:id="@+id/textViewUserEmail"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/white"
-                    android:textSize="20sp"
-                    android:layout_marginRight="10dp"/>
-            </androidx.appcompat.widget.LinearLayoutCompat>
+            android:elevation="8dp"
+            app:cardBackgroundColor="@android:color/transparent"
+            >
+
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="10dp">
-                <TextView
-                    android:id="@+id/textView2"
+                android:padding="16dp"
+                android:orientation="vertical">
+
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    >
+                    <TextView
+                        android:id="@+id/textViewUserAdress"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        android:textSize="18sp"
+                        android:layout_marginRight="2dp"/>
+                </androidx.appcompat.widget.LinearLayoutCompat>
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/DeliveryStep"
-                    android:textColor="@color/white"
-                    android:textSize="20sp"
-                    android:layout_marginRight="20dp"/>
-                <Spinner
-                    android:id="@+id/spinnerDeliveryStep"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="20sp"
-                    />
+                    android:orientation="horizontal"
+                    android:layout_marginTop="10dp">
+                    <TextView
+                        android:id="@+id/textView2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/DeliveryStep"
+                        android:textColor="@color/white"
+                        android:textSize="20sp"
+                        android:layout_marginRight="50dp"/>
+                    <Spinner
+                        android:id="@+id/spinnerDeliveryStep"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:textSize="20sp"
+                        />
+                </LinearLayout>
             </LinearLayout>
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
-</FrameLayout>
+        </androidx.cardview.widget.CardView>
+    </FrameLayout>
+</RelativeLayout>

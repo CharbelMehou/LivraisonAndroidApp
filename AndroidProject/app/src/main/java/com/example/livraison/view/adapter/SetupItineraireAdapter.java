@@ -1,102 +1,90 @@
 package com.example.livraison.view.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.livraison.R;
 import com.example.livraison.model.Order;
+import com.example.livraison.viewmodel.ViewItineraire;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
-public class SetupItineraireAdapter extends RecyclerView.Adapter<SetupItineraireAdapter.MyViewHolder> {
+public class SetupItineraireAdapter extends RecyclerView.Adapter<SetupItineraireAdapter.MyViewHolder>{
 
     private Context context;
-    private ArrayList<Order> orders;
+    private HashMap<String, ArrayList<Order>> ordersGroupedByDriver;
+    private ArrayList<String> driverEmails;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-    public SetupItineraireAdapter(Context context, ArrayList<Order> orders) {
-        this.context = context;
-        this.orders = orders;
-    }
 
+    public SetupItineraireAdapter(Context context, HashMap<String, ArrayList<Order>> ordersGroupedByDriver, ArrayList<String> driverEmails) {
+        this.context = context;
+        this.ordersGroupedByDriver = ordersGroupedByDriver;
+        this.driverEmails = driverEmails;
+    }
     @NonNull
     @Override
-    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(context).inflate(R.layout.ongoing_delivery_card, parent, false);
+    public SetupItineraireAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(context).inflate(R.layout.driver_mission_card, parent, false);
         return new MyViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        Order order = orders.get(position);
+    public void onBindViewHolder(@NonNull SetupItineraireAdapter.MyViewHolder holder, int position) {
+        String driverEmail = driverEmails.get(position);
+        ArrayList<Order> ordersForThisDriver = ordersGroupedByDriver.get(driverEmail);
 
-        holder.textViewDriverEmail.setText(order.getDriverSelected());
-        holder.textViewUserEmail.setText(order.getUserEmail());
+        holder.textViewDriver.setText(driverEmail);
 
-        // Gestion du spinner pour les étapes de livraison
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, generateStepOptions(order));
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        holder.spinnerDeliveryStep.setAdapter(adapter);
+        SetupItineraireItemAdapter itemAdapter = new SetupItineraireItemAdapter(context, ordersForThisDriver);
+        holder.recyclerViewDeliveryItems.setLayoutManager(new LinearLayoutManager(context));
+        holder.recyclerViewDeliveryItems.setAdapter(itemAdapter);
 
-        holder.spinnerDeliveryStep.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String step = parent.getItemAtPosition(position).toString();
-                order.setStep(step);
-
-                // Mettre à jour Firestore en utilisant tempId comme ID de l'Order
-                db.collection("orders").document(order.getTempId())
-                        .update("step", step);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+        holder.validateItineraire.setOnClickListener(v -> {
+            for (Order order : ordersForThisDriver) {
+                String step = order.getStep();
+                if (step != null) {
+                    db.collection("orders").document(order.getTempId())
+                            .update("step", step)
+                            .addOnSuccessListener(aVoid -> {
+                                Toast.makeText(context, "Itinéraire paramétrée", Toast.LENGTH_SHORT).show();
+                            })
+                            .addOnFailureListener(e -> {
+                                // Gérer l'échec ici
+                            });
+                }
             }
         });
     }
 
-    private ArrayList<String> generateStepOptions(Order order) {
-        int steps = countOrdersWithSameDriver(order.getDriverSelected());
-        ArrayList<String> stepOptions = new ArrayList<>();
-        for (int i = 0; i <= steps; i++) {
-            stepOptions.add(String.valueOf(i));
-        }
-        return stepOptions;
-    }
-
-    private int countOrdersWithSameDriver(String driverEmail) {
-        int count = 0;
-        for (Order o : orders) {
-            if (o.getDriverSelected() != null && o.getDriverSelected().equals(driverEmail)) {
-                count++;
-            }
-        }
-        return count;
-    }
-
     @Override
     public int getItemCount() {
-        return orders.size();
+        return driverEmails.size();
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView textViewDriverEmail, textViewUserEmail;
-        Spinner spinnerDeliveryStep;
+        TextView textViewDriver;
+        Button validateItineraire;
+        RecyclerView recyclerViewDeliveryItems;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            textViewDriverEmail = itemView.findViewById(R.id.textViewDriverEmail);
-            textViewUserEmail = itemView.findViewById(R.id.textViewUserEmail);
-            spinnerDeliveryStep = itemView.findViewById(R.id.spinnerDeliveryStep);
+            textViewDriver = itemView.findViewById(R.id.textViewDriver);
+            validateItineraire=itemView.findViewById(R.id.validateItineraire);
+            recyclerViewDeliveryItems = itemView.findViewById(R.id.recyclerViewDeliveryMissionsItems);
         }
     }
+
 }
