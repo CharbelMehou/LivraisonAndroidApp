@@ -21,7 +21,9 @@ import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ViewItineraire extends AppCompatActivity {
     private MapView map;
@@ -71,6 +73,8 @@ public class ViewItineraire extends AppCompatActivity {
     }
 
     private void fetchDeliveryPoints(ArrayList<String> orderIds) {
+        Map<Integer, GeoPoint> tempDeliveryPoints = new HashMap<>();
+
         for (String orderId : orderIds) {
             db.collection("orders").document(orderId).get().addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
@@ -78,38 +82,48 @@ public class ViewItineraire extends AppCompatActivity {
                     if (document != null && document.exists()) {
                         String latitudeStr = document.getString("latitude");
                         String longitudeStr = document.getString("longitude");
-                        if (latitudeStr != null && longitudeStr != null) {
+                        String stepStr = document.getString("step");
+
+                        if (latitudeStr != null && longitudeStr != null && stepStr != null) {
                             try {
                                 double latitude = Double.parseDouble(latitudeStr);
                                 double longitude = Double.parseDouble(longitudeStr);
+                                int step = Integer.parseInt(stepStr);
                                 GeoPoint deliveryPoint = new GeoPoint(latitude, longitude);
-                                deliveryPoints.add(deliveryPoint);
-                                addMarker(deliveryPoint, "Commande ID: " + orderId,R.drawable.delivery_point);
-                                drawPolyline();
-                                // Dessiner les polylignes après avoir ajouté tous les points
-                                if (deliveryPoints.size() == orderIds.size()) {
+
+                                tempDeliveryPoints.put(step, deliveryPoint);
+
+                                // Vérifier si tous les points ont été récupérés
+                                if (tempDeliveryPoints.size() == orderIds.size()) {
+                                    List<Map.Entry<Integer, GeoPoint>> sortedEntries = new ArrayList<>(tempDeliveryPoints.entrySet());
+                                    sortedEntries.sort(Map.Entry.comparingByKey());
+
+                                    for (Map.Entry<Integer, GeoPoint> entry : sortedEntries) {
+                                        deliveryPoints.add(entry.getValue());
+                                        addMarker(entry.getValue(), "Commande ID: " + orderId, R.drawable.delivery_point);
+                                    }
+                                    // Pour ajouter le dépôt en tant que dernier point pour revenir au début du circuit
+                                    deliveryPoints.add(warehouse);
+
                                     drawPolyline();
                                     map.getController().setCenter(deliveryPoints.get(0));
                                     map.getController().setZoom(14);
                                 }
                             } catch (NumberFormatException e) {
-                                Toast.makeText(this, "Format des coordonnées invalide", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(ViewItineraire.this, "Format des coordonnées invalide", Toast.LENGTH_SHORT).show();
                             }
                         } else {
-                            Toast.makeText(this, "Coordonnées de livraison manquantes", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ViewItineraire.this, "Coordonnées de livraison manquantes", Toast.LENGTH_SHORT).show();
                         }
                     } else {
-                        Toast.makeText(this, "Localisation de commande introuvable pour ID: " + orderId, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ViewItineraire.this, "Localisation de commande introuvable pour ID: " + orderId, Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(this, "Erreur lors de la récupération des localisations des commandes", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ViewItineraire.this, "Erreur lors de la récupération des localisations des commandes", Toast.LENGTH_SHORT).show();
                 }
             });
         }
     }
-
-
-
 
     private void addMarker(GeoPoint point, String title, int drawableResId) {
         Marker marker = new Marker(map);
