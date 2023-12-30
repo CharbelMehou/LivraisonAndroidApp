@@ -1,4 +1,4 @@
-package com.example.livraison.view.adapter;
+package com.example.livraison.adapter;
 
 import android.content.Context;
 import android.text.Editable;
@@ -38,7 +38,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(context).inflate(R.layout.item, parent, false);
+        View v = LayoutInflater.from(context).inflate(R.layout.product_card_item, parent, false);
         return new MyViewHolder(v);
     }
 

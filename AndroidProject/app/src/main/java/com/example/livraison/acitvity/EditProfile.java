@@ -1,4 +1,4 @@
-package com.example.livraison.viewmodel;
+package com.example.livraison.acitvity;
 
 import androidx.appcompat.app.AppCompatActivity;
 

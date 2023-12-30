@@ -1,4 +1,4 @@
-package com.example.livraison.view.adapter;
+package com.example.livraison.adapter;
 
 import android.content.Context;
 import android.util.Log;

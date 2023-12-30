@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".viewmodel.ViewItineraire">
+    tools:context=".acitvity.ViewItineraire">
 
     <Button
         android:id="@+id/goback_button"

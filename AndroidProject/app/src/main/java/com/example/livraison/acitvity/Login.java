@@ -1,8 +1,7 @@
-package com.example.livraison.viewmodel;
+package com.example.livraison.acitvity;
 
 import static android.widget.Toast.LENGTH_SHORT;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,15 +13,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.livraison.R;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-public class LoginViewModel extends AppCompatActivity {
+public class Login extends AppCompatActivity {
     TextInputEditText editTextEmail, editTextPassword;
     Button buttonLogin;
     FirebaseAuth mAuth;
@@ -41,7 +37,7 @@ public class LoginViewModel extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login_view_model);
+        setContentView(R.layout.activity_login);
 
         editTextEmail = findViewById(R.id.email);
         editTextPassword = findViewById(R.id.password);
@@ -51,7 +47,7 @@ public class LoginViewModel extends AppCompatActivity {
         textView = findViewById(R.id.RegsiterNow);
 
         textView.setOnClickListener(v -> {
-            Intent intent = new Intent(getApplicationContext(), RegisterViewModel.class);
+            Intent intent = new Intent(getApplicationContext(), Register.class);
             startActivity(intent);
             finish();
         });
@@ -61,7 +57,7 @@ public class LoginViewModel extends AppCompatActivity {
             String password = editTextPassword.getText().toString();
 
             if(TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
-                Toast.makeText(LoginViewModel.this, "Please enter email and password", LENGTH_SHORT).show();
+                Toast.makeText(Login.this, "Please enter email and password", LENGTH_SHORT).show();
                 return;
             }
 
@@ -72,7 +68,7 @@ public class LoginViewModel extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             redirectUserBasedOnRole();
                         } else {
-                            Toast.makeText(LoginViewModel.this, "Authentication failed.", LENGTH_SHORT).show();
+                            Toast.makeText(Login.this, "Authentication failed.", LENGTH_SHORT).show();
                         }
                     });
         });

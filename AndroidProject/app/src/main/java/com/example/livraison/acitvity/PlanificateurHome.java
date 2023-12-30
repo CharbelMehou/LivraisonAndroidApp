@@ -1,9 +1,8 @@
-package com.example.livraison.viewmodel;
+package com.example.livraison.acitvity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -34,7 +33,7 @@ public class PlanificateurHome extends AppCompatActivity {
         setupItineraireButton = findViewById(R.id.setupItineraire);
 
         if(user == null){
-            Intent intent = new Intent(getApplicationContext(), LoginViewModel.class);
+            Intent intent = new Intent(getApplicationContext(), Login.class);
             startActivity(intent);
             finish();
         } else {

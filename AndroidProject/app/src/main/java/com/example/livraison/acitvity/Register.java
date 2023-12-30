@@ -1,4 +1,4 @@
-package com.example.livraison.viewmodel;
+package com.example.livraison.acitvity;
 
 import static android.widget.Toast.*;
 
@@ -6,7 +6,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -36,7 +35,7 @@ import java.util.Map;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-public class RegisterViewModel extends AppCompatActivity {
+public class Register extends AppCompatActivity {
     TextInputEditText editTextEmail,editTextPassword;
     Button buttonRegister;
     FirebaseAuth mAuth;
@@ -46,7 +45,7 @@ public class RegisterViewModel extends AppCompatActivity {
     TextInputLayout addressLayout;
     private MutableLiveData<List<String>> roles;
     private AutoCompleteTextView autoCompleteTextView;
-    private RegisterViewModel viewModel;
+    private Register viewModel;
     @Override
     public void onStart() {
         super.onStart();
@@ -58,7 +57,7 @@ public class RegisterViewModel extends AppCompatActivity {
             finish();
         }
     }
-    public RegisterViewModel() {
+    public Register() {
         roles = new MutableLiveData<>();
         // Initialisation de la liste des rôles
         roles.setValue(Arrays.asList("Client", "Planificateur", "Chauffeur"));
@@ -70,7 +69,7 @@ public class RegisterViewModel extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register_view_model);
+        setContentView(R.layout.activity_register);
         editTextEmail=findViewById(R.id.email);
         editTextPassword=findViewById(R.id.password);
         addressLayout=findViewById(R.id.addressLayout);
@@ -112,7 +111,7 @@ public class RegisterViewModel extends AppCompatActivity {
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(getApplicationContext(), LoginViewModel.class);
+                Intent intent=new Intent(getApplicationContext(), Login.class);
                 startActivity(intent);
                 finish();
             }
@@ -130,13 +129,13 @@ public class RegisterViewModel extends AppCompatActivity {
 
                 // To check if the data to register are empty or not
                 if(TextUtils.isEmpty(email)){
-                    Toast.makeText(RegisterViewModel.this,"Enter email", LENGTH_SHORT).show();
+                    Toast.makeText(Register.this,"Enter email", LENGTH_SHORT).show();
                     progressBar.setVisibility(View.GONE);
                     return;
                 }
 
                 if(TextUtils.isEmpty(password)){
-                    Toast.makeText(RegisterViewModel.this,"Enter password", LENGTH_SHORT).show();
+                    Toast.makeText(Register.this,"Enter password", LENGTH_SHORT).show();
                     progressBar.setVisibility(View.GONE);
                     return;
                 }
@@ -168,21 +167,21 @@ public class RegisterViewModel extends AppCompatActivity {
                                         db.collection("users").document(userId)
                                                 .set(userData)
                                                 .addOnSuccessListener(aVoid -> {
-                                                    Toast.makeText(RegisterViewModel.this, "Account created with additional info.",
+                                                    Toast.makeText(Register.this, "Account created with additional info.",
                                                             Toast.LENGTH_SHORT).show();
                                                     // Redirect to login or main activity
-                                                    Intent intent = new Intent(getApplicationContext(), LoginViewModel.class);
+                                                    Intent intent = new Intent(getApplicationContext(), Login.class);
                                                     startActivity(intent);
                                                     finish();
                                                 })
                                                 .addOnFailureListener(e -> {
-                                                    Toast.makeText(RegisterViewModel.this, "Failed to add additional info.",
+                                                    Toast.makeText(Register.this, "Failed to add additional info.",
                                                             Toast.LENGTH_SHORT).show();
                                                 });
                                     }
                                 } else {
                                     // If sign in fails, display a message to the user.
-                                    Toast.makeText(RegisterViewModel.this, "Registration failed.",
+                                    Toast.makeText(Register.this, "Registration failed.",
                                             Toast.LENGTH_SHORT).show();
                                 }
                                 progressBar.setVisibility(View.GONE);

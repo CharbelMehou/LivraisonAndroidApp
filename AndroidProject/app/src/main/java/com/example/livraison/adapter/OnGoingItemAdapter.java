@@ -1,27 +1,19 @@
-package com.example.livraison.view.adapter;
+package com.example.livraison.adapter;
 
 import android.content.Context;
-import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.livraison.R;
 import com.example.livraison.model.Order;
-import com.example.livraison.viewmodel.OnGoingDelivery;
-import com.example.livraison.viewmodel.ViewItineraire;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class OnGoingItemAdapter extends RecyclerView.Adapter<OnGoingItemAdapter.MyViewHolder> {
     private Context context;

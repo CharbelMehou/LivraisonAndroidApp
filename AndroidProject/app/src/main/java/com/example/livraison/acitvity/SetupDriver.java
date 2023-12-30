@@ -1,4 +1,4 @@
-package com.example.livraison.viewmodel;
+package com.example.livraison.acitvity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -13,8 +13,7 @@ import android.widget.Toast;
 
 import com.example.livraison.R;
 import com.example.livraison.model.Order;
-import com.example.livraison.view.adapter.PlanificateurAdapter;
-import com.google.firebase.auth.FirebaseAuth;
+import com.example.livraison.adapter.PlanificateurAdapter;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.FirebaseFirestore;

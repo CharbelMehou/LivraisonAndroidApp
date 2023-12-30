@@ -1,4 +1,4 @@
-package com.example.livraison.viewmodel;
+package com.example.livraison.acitvity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -14,14 +14,9 @@ import android.widget.Toast;
 
 import com.example.livraison.R;
 import com.example.livraison.model.Order;
-import com.example.livraison.view.adapter.DriverAdapter;
+import com.example.livraison.adapter.DriverAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.FirebaseFirestore;
 

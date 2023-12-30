@@ -1,4 +1,4 @@
-package com.example.livraison.view.adapter;
+package com.example.livraison.adapter;
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.livraison.R;
 import com.example.livraison.model.Order;
-import com.example.livraison.viewmodel.ViewItineraire;
+import com.example.livraison.acitvity.ViewItineraire;
 import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 import java.util.HashMap;

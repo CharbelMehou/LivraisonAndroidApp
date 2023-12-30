@@ -1,4 +1,4 @@
-package com.example.livraison.viewmodel;
+package com.example.livraison.acitvity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -7,14 +7,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.example.livraison.R;
 import com.example.livraison.model.Order;
-import com.example.livraison.view.adapter.SetupItineraireAdapter;
-import com.example.livraison.view.adapter.SetupItineraireItemAdapter;
+import com.example.livraison.adapter.SetupItineraireAdapter;
+import com.example.livraison.adapter.SetupItineraireItemAdapter;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.FirebaseFirestore;
 

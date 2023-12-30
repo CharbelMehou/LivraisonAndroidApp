@@ -7,7 +7,7 @@
     android:gravity="center"
     android:orientation="vertical"
     android:padding="16dp"
-    tools:context=".viewmodel.EditProfile">
+    tools:context=".acitvity.EditProfile">
 
     <Button
         android:id="@+id/goback_button"
@@ -25,7 +25,7 @@
         android:gravity="center"
         android:orientation="vertical"
         android:padding="16dp"
-        tools:context=".viewmodel.EditProfile">
+        tools:context=".acitvity.EditProfile">
     <TextView
         android:id="@+id/textView"
         android:textSize="20sp"

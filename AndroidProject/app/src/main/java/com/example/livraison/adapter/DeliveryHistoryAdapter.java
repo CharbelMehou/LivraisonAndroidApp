@@ -1,13 +1,10 @@
-package com.example.livraison.view.adapter;
+package com.example.livraison.adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,8 +14,6 @@ import com.example.livraison.model.Order;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class DeliveryHistoryAdapter extends RecyclerView.Adapter<DeliveryHistoryAdapter.MyViewHolder>{
 

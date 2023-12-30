@@ -1,4 +1,4 @@
-package com.example.livraison.viewmodel;
+package com.example.livraison.acitvity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -36,7 +36,7 @@ public class ChauffeurHome extends AppCompatActivity {
         gotoDeliveryHistory=findViewById(R.id.gotoDeliveryHistory);
         //to check if the user is log or not
         if(user==null){
-            Intent intent =new Intent(getApplicationContext(),LoginViewModel.class);
+            Intent intent =new Intent(getApplicationContext(), Login.class);
             startActivity(intent);
             finish();
         }

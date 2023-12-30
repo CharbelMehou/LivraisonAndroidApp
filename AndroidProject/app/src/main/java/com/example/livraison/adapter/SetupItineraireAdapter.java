@@ -1,7 +1,6 @@
-package com.example.livraison.view.adapter;
+package com.example.livraison.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.livraison.R;
 import com.example.livraison.model.Order;
-import com.example.livraison.viewmodel.ViewItineraire;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;

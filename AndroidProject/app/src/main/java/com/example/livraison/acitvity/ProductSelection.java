@@ -1,4 +1,4 @@
-package com.example.livraison.viewmodel;
+package com.example.livraison.acitvity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -9,9 +9,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
 import okhttp3.OkHttpClient;
@@ -19,7 +17,7 @@ import android.util.Pair;
 import com.example.livraison.R;
 import com.example.livraison.model.Order;
 import com.example.livraison.model.Product;
-import com.example.livraison.view.adapter.ProductAdapter;
+import com.example.livraison.adapter.ProductAdapter;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentChange;
@@ -31,13 +29,12 @@ import java.util.Calendar;
 import java.util.function.Consumer;
 import okhttp3.Call;
 import okhttp3.Callback;
-import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-public class ProductionSelectionViewModel extends AppCompatActivity implements ProductAdapter.OnQuantityChangedListener {
+public class ProductSelection extends AppCompatActivity implements ProductAdapter.OnQuantityChangedListener {
 
     private FirebaseFirestore db;
     private RecyclerView productsRecyclerView;
@@ -49,7 +46,7 @@ public class ProductionSelectionViewModel extends AppCompatActivity implements P
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_production_selection_view_model);
+        setContentView(R.layout.activity_product_selection);
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setCancelable(false);
@@ -72,7 +69,7 @@ public class ProductionSelectionViewModel extends AppCompatActivity implements P
 
         Button goBackButton = findViewById(R.id.goback_button);
         goBackButton.setOnClickListener(v -> {
-            Intent intent = new Intent(ProductionSelectionViewModel.this, ClientHome.class);
+            Intent intent = new Intent(ProductSelection.this, ClientHome.class);
             startActivity(intent);
             finish();
         });
@@ -200,7 +197,7 @@ public class ProductionSelectionViewModel extends AppCompatActivity implements P
             @Override
             public void onFailure(Call call, IOException e) {
                 runOnUiThread(() -> {
-                    Toast.makeText(ProductionSelectionViewModel.this, "Network error", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ProductSelection.this, "Network error", Toast.LENGTH_SHORT).show();
                     callback.accept(null);
                 });
             }
@@ -227,13 +224,13 @@ public class ProductionSelectionViewModel extends AppCompatActivity implements P
                         }
                     } catch (JSONException e) {
                         runOnUiThread(() -> {
-                            Toast.makeText(ProductionSelectionViewModel.this, "Error parsing response", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ProductSelection.this, "Error parsing response", Toast.LENGTH_SHORT).show();
                             callback.accept(null);
                         });
                     }
                 } else {
                     runOnUiThread(() -> {
-                        Toast.makeText(ProductionSelectionViewModel.this, "Error from server", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ProductSelection.this, "Error from server", Toast.LENGTH_SHORT).show();
                         callback.accept(null);
                     });
                 }

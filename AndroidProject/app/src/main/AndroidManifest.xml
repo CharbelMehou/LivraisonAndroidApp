@@ -18,40 +18,40 @@
         android:theme="@style/Theme.Material3.Dark.NoActionBar"
         tools:targetApi="31">
         <activity
-            android:name=".viewmodel.SetupDriver"
+            android:name=".acitvity.SetupDriver"
             android:exported="false" />
         <activity
-            android:name=".viewmodel.SetupItineraire"
+            android:name=".acitvity.SetupItineraire"
             android:exported="false" />
         <activity
-            android:name=".viewmodel.DeliveryHistory"
+            android:name=".acitvity.DeliveryHistory"
             android:exported="false" />
         <activity
-            android:name=".viewmodel.ViewItineraire"
+            android:name=".acitvity.ViewItineraire"
             android:exported="false" />
         <activity
-            android:name=".viewmodel.OnGoingDelivery"
+            android:name=".acitvity.OnGoingDelivery"
             android:exported="false" />
         <activity
-            android:name=".viewmodel.WaintingDelivery"
+            android:name=".acitvity.WaintingDelivery"
             android:exported="false" />
         <activity
-            android:name=".viewmodel.ChauffeurHome"
+            android:name=".acitvity.ChauffeurHome"
             android:exported="false" />
         <activity
-            android:name=".viewmodel.PlanificateurHome"
+            android:name=".acitvity.PlanificateurHome"
             android:exported="false" />
         <activity
-            android:name=".viewmodel.ClientHome"
+            android:name=".acitvity.ClientHome"
             android:exported="false" />
         <activity
-            android:name=".viewmodel.ProductionSelectionViewModel"
+            android:name=".acitvity.ProductSelection"
             android:exported="false" />
         <activity
-            android:name=".viewmodel.EditProfile"
+            android:name=".acitvity.EditProfile"
             android:exported="false" />
         <activity
-            android:name=".viewmodel.LandingPage"
+            android:name=".acitvity.LandingPage"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -60,15 +60,15 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".viewmodel.RegisterViewModel"
+            android:name=".acitvity.Register"
             android:exported="false"
             android:theme="@style/Theme.Material3.Dark.NoActionBar" />
         <activity
-            android:name=".viewmodel.LoginViewModel"
+            android:name=".acitvity.Login"
             android:exported="false"
             android:theme="@style/Theme.Material3.Dark.NoActionBar" />
         <activity
-            android:name=".viewmodel.MainActivity"
+            android:name=".acitvity.MainActivity"
             android:exported="true" />
     </application>
 

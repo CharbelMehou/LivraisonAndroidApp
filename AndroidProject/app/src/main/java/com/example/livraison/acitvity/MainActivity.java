@@ -1,4 +1,4 @@
-package com.example.livraison.viewmodel;
+package com.example.livraison.acitvity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -12,18 +12,17 @@ import com.example.livraison.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-public class ClientHome extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity {
     FirebaseAuth auth;
     Button logOutbutton;
     Button buttonSetData;
     Button buttonSelectProduct;
-
     TextView textView;
     FirebaseUser user;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_client_home);
+        setContentView(R.layout.activity_main);
 
         auth=FirebaseAuth.getInstance();
         logOutbutton=findViewById(R.id.logout);
@@ -33,13 +32,12 @@ public class ClientHome extends AppCompatActivity {
         user =auth.getCurrentUser();
         //to check if the user is log or not
         if(user==null){
-            Intent intent =new Intent(getApplicationContext(),LoginViewModel.class);
+            Intent intent =new Intent(getApplicationContext(), Login.class);
             startActivity(intent);
             finish();
         }
         else{
             textView.setText(user.getEmail());
-
         }
         //rediriger vers la landing page
         logOutbutton.setOnClickListener(new View.OnClickListener() {
@@ -55,7 +53,7 @@ public class ClientHome extends AppCompatActivity {
                 }
             }
         });
-        //Pour rediriger vers la page de selection de modification de donnée de profil
+        //Pour rediriger vers la page de selection de modificaiton de donnée de profil
         buttonSetData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -64,12 +62,11 @@ public class ClientHome extends AppCompatActivity {
                 finish();
             }
         });
-
         //Pour rediriger vers la page de seleciton de produits
         buttonSelectProduct.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent =new Intent(getApplicationContext(),ProductionSelectionViewModel.class);
+                Intent intent =new Intent(getApplicationContext(), ProductSelection.class);
                 startActivity(intent);
                 finish();
             }

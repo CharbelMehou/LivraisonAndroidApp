@@ -1,4 +1,4 @@
-package com.example.livraison.viewmodel;
+package com.example.livraison.acitvity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -23,7 +23,7 @@ public class LandingPage extends AppCompatActivity {
         buttonRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(getApplicationContext(), RegisterViewModel.class);
+                Intent intent=new Intent(getApplicationContext(), Register.class);
                 startActivity(intent);
                 finish();
             }
@@ -32,7 +32,7 @@ public class LandingPage extends AppCompatActivity {
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(getApplicationContext(), LoginViewModel.class);
+                Intent intent=new Intent(getApplicationContext(), Login.class);
                 startActivity(intent);
                 finish();
             }
