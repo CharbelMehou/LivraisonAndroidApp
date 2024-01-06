@@ -27,8 +27,7 @@ public class OnGoingDelivery extends AppCompatActivity {
     private OnGoingAdapter onGoingAdapter;
     private ProgressDialog progressDialog;
     private Button goBackButton;
-
-    private String driverEmail; // Variable pour stocker l'email du conducteur
+    private String driverEmail;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     // Structure pour regrouper les commandes par date
